@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  db:
+    image: ayanonk/dblayer:latest
+    ports:
+      - "5432:5432"
+    networks:
+      - blog
+  usersvc:
+    image: ayanonk/usersvc:latest
+    ports:
+      - target: 5000
+        published: 5000
+        mode: host
+    networks:
+      - blog
+    depends_on:
+      - db
+  blogsvc:
+    image: ayanonk/blogsvc:latest
+    ports:
+      - target: 8000
+        published: 8000
+        mode: host
+    networks:
+      - blog
+    depends_on:
+      - db
+      - usersvc
+networks:
+  blog:
+    external: true
